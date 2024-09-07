@@ -1,4 +1,4 @@
-name: Relabel Issues and PRs
+name: Tests
 
 on:
   push:
