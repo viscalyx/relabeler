@@ -47,7 +47,13 @@ jobs:
           path: artifact/
 
       - name: Run Relabeler
+        id: relabeler
         uses: ./ # This uses the action from the root of the branch or PR
         with:
           who-to-greet: "GitHub"
           repositoryToken: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Print Relabeler Outputs
+        run: |
+          echo "Repository: ${{ steps.relabeler.outputs.repository }}"
+          echo "Time: ${{ steps.relabeler.outputs.time }}"
