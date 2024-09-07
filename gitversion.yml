@@ -1,46 +1,32 @@
 mode: ContinuousDelivery
 next-version: 0.0.1
-major-version-bump-message: '(breaking\schange|breaking|major)\b'
-minor-version-bump-message: '(adds?|features?|minor)\b'
+major-version-bump-message: '(breaking\schange|breaking)\b'
+minor-version-bump-message: '(adds?|minor)\b'
 patch-version-bump-message: '\s?(fix|patch)'
 no-bump-message: '\+semver:\s?(none|skip)'
+assembly-informational-format: "{SemVer}+Sha.{Sha}.Date.{CommitDate}"
 branches:
   main:
+    label: preview
     regex: ^main$
-    mode: ContinuousDelivery
-    label: ""
+  pull-request:
+    label: PR
+  feature:
+    label: "{BranchName}"
+    increment: Minor
+    regex: ^f(eature(s)?)?[\/-](?<BranchName>.+)
+    source-branches: ["main"]
+  hotfix:
+    label: fix
     increment: Patch
-    prevent-increment-of-merged-branch-version: true
-    track-merge-target: false
-    tracks-release-branches: false
-    is-release-branch: false
+    regex: (hot)?fix(es)?[\/-]
+    source-branches: ["main"]
   release:
     regex: ^releases?[/-]
-    mode: ContinuousDelivery
-    label: beta
+    label: ""
     increment: Patch
-    prevent-increment-of-merged-branch-version: true
-    track-merge-target: false
-    tracks-release-branches: false
     is-release-branch: true
-  feature:
-    regex: ^features?[/-]
-    mode: ContinuousDelivery
-    label: "{BranchName}"
-    increment: Inherit
-    prevent-increment-of-merged-branch-version: false
-    track-merge-target: false
-    tracks-release-branches: false
-    is-release-branch: false
-  pull-request:
-    mode: ContinuousDelivery
-    label: PR
-    increment: Inherit
-    prevent-increment-of-merged-branch-version: false
-    tag-number-pattern: '[/-](?<number>\d+)'
-    track-merge-target: false
-    tracks-release-branches: false
-    is-release-branch: false
+
 ignore:
   sha: []
 merge-message-formats: {}
