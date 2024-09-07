@@ -1,0 +1,20 @@
+name: Create Release Branch
+
+on:
+  push:
+    tags:
+      - "v*"
+
+jobs:
+  create-release-branch:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+
+      - name: Create Release Branch
+        run: |
+          VERSION=${GITHUB_REF#refs/tags/}
+          git checkout -b releases/$VERSION
+          git push -u origin releases/$VERSION

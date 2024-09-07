@@ -1,0 +1,52 @@
+name: Relabel Issues and PRs
+
+on:
+  push:
+    branches:
+      - main
+      - "releases/**"
+    paths:
+      - "src/**"
+      - "package.json"
+      - "package-lock.json"
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  relabel:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: "18.x"
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build project
+        run: npm run build # Assumes you have a build script in package.json
+
+      - name: Test
+        run: npm test
+
+      - name: Create artifact
+        run: |
+          mkdir artifact
+          cp -r dist package.json package-lock.json artifact/
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: build-artifact
+          path: artifact/
+
+      - name: Run Relabeler
+        uses: ./ # This uses the action from the root of the branch or PR
+        with:
+          who-to-greet: "GitHub"
+          repositoryToken: ${{ secrets.GITHUB_TOKEN }}

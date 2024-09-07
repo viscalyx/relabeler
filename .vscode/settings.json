@@ -1,0 +1,19 @@
+{
+    "editor.codeActionsOnSave": {
+        "source.fixAll.eslint": "always"
+    },
+    "editor.formatOnSave": true,
+    "eslint.validate": [
+        "javascript",
+        "typescript"
+    ],
+    "cSpell.ignorePaths": [
+        ".git",
+        "settings.json"
+    ],
+    "cSpell.words": [
+        "Relabeler",
+        "relabeler",
+        "unmock"
+    ]
+}

@@ -1,0 +1,74 @@
+# This workflow is used to package and push the dist folder to the specified branch (main or release branch)
+# It is triggered by a push to the main branch or any release branch. The release branch must be in the format "releases/x.y.z"
+# and is created by the create release branch workflow.
+name: Build, Push, and Release
+
+on:
+  push:
+    branches:
+      - main
+      - "releases/**"
+    paths:
+      - "src/**"
+      - "package.json"
+      - "package-lock.json"
+
+jobs:
+  build-and-push:
+    runs-on: ubuntu-latest
+    steps:
+      # Checkout the repository
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0 # Important for GitVersion
+
+      # Install GitVersion
+      - name: Install GitVersion
+        uses: gittools/actions/gitversion/setup@v0.9.7 # cSpell: ignore gittools
+        with:
+          versionSpec: "6.x"
+
+      # Determine the version using GitVersion
+      - name: Determine Version
+        id: gitversion
+        uses: gittools/actions/gitversion/execute@v0.9.7
+
+      # Setup Node.js environment
+      - name: Use Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: "16"
+
+      # Install dependencies
+      - name: Install dependencies
+        run: npm ci
+
+      # Update the version in package.json
+      - name: Update package.json version
+        run: |
+          VERSION=${{ steps.gitversion.outputs.semVer }}
+          echo "Updating package.json version to $VERSION"
+          npm version $VERSION --no-git-tag-version
+
+      # Build the project
+      - name: Build
+        run: npm run build
+
+      # Commit and push changes if there are any
+      - name: Commit and push if changed
+        run: |
+          git config --global user.name 'GitHub Action'
+          git config --global user.email 'action@github.com'
+          git add package.json dist
+          git diff --quiet && git diff --staged --quiet || (git commit -m "Automated build: Update version to ${{ steps.gitversion.outputs.semVer }} and rebuild dist" && git push)
+
+      # Create a release if on a release branch
+      - name: Create Release
+        if: startsWith(github.ref, 'refs/heads/releases/')
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          gh release create v${{ steps.gitversion.outputs.semVer }} \
+            --title "Release ${{ steps.gitversion.outputs.semVer }}" \
+            --notes "Release ${{ steps.gitversion.outputs.semVer }} of the action. This release includes the latest built version of the dist folder." \
+            --target $GITHUB_SHA
