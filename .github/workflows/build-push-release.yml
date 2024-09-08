@@ -82,16 +82,27 @@ jobs:
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }} # This is needed for the gh cli
 
-      # Create a preview tag if on the main branch
+      # Create a preview tag if on the main branch and dist has changed
       - name: Create Preview Tag
-        if: github.ref == 'refs/heads/main'
+        if: github.ref == 'refs/heads/main' && steps.check_dist_changes.outputs.dist_changed == 'true'
         run: |
           git tag v${{ steps.gitversion.outputs.semVer }}
           git push origin v${{ steps.gitversion.outputs.semVer }}
 
-      # Create Release if on a release branch
+      # Create a draft release for the preview tag if on the main branch and dist has changed
+      - name: Create Draft Release
+        if: github.ref == 'refs/heads/main' && steps.check_dist_changes.outputs.dist_changed == 'true'
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          gh release create v${{ steps.gitversion.outputs.semVer }} \
+            --title "Preview Release ${{ steps.gitversion.outputs.semVer }}" \
+            --notes "This is a preview release for version ${{ steps.gitversion.outputs.semVer }}." \
+            --draft
+
+      # Create Release if on a release branch and dist has changed
       - name: Create Release
-        if: startsWith(github.ref, 'refs/heads/releases/')
+        if: startsWith(github.ref, 'refs/heads/releases/') && steps.check_dist_changes.outputs.dist_changed == 'true'
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
