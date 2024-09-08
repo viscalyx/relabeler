@@ -33352,7 +33352,7 @@ async function run() {
         // Load the configuration
         const workspacePath = process.env.GITHUB_WORKSPACE || '';
         const config = (0, config_1.loadConfig)(workspacePath);
-        console.log('Config loaded:', JSON.stringify(config, null, 2));
+        console.log('Config loaded: ', JSON.stringify(config, null, 2));
         core.debug(`Loaded config: ${JSON.stringify(config)}`);
         const time = (new Date()).toTimeString();
         console.log(`Setting output: time=${time}`);
