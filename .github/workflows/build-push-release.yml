@@ -43,32 +43,44 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
-      # Update the version in package.json
-      - name: Update package.json version
-        run: |
-          VERSION=${{ steps.gitversion.outputs.semVer }}
-          echo "Updating package.json version to $VERSION"
-          npm version $VERSION --no-git-tag-version
-
       # Build the project
       - name: Build
         run: npm run build
 
+      # Check if dist folder has changed
+      - name: Check for dist changes
+        id: check_dist_changes
+        run: |
+          git add dist
+          if git diff --cached --quiet; then
+            echo "dist_changed=false" >> "$GITHUB_OUTPUT"
+          else
+            echo "dist_changed=true" >> "$GITHUB_OUTPUT"
+          fi
+
+      # Update the version in package.json if dist has changed
+      - name: Update package.json version
+        if: steps.check_dist_changes.outputs.dist_changed == 'true'
+        run: |
+          VERSION=${{ steps.gitversion.outputs.semVer }}
+          echo "Updating package.json version to $VERSION"
+          npm version $VERSION --no-git-tag-version
+          git add package.json
+
       # Commit and push changes if there are any
       - name: Commit and push if changed
+        if: steps.check_dist_changes.outputs.dist_changed == 'true'
         run: |
           git config --global user.name 'GitHub Action'
           git config --global user.email 'action@github.com'
-          git add package.json dist
-          git diff --quiet && git diff --staged --quiet || (
-            BRANCH_NAME="update-version-${{ steps.gitversion.outputs.semVer }}"
-            git checkout -b $BRANCH_NAME
-            git commit -m "Automated build: Update version to ${{ steps.gitversion.outputs.semVer }} and rebuild dist"
-            git push origin $BRANCH_NAME
-            gh pr create --title "Automated build: Update version to ${{ steps.gitversion.outputs.semVer }}" --body "This PR updates the version to ${{ steps.gitversion.outputs.semVer }} and rebuilds the dist folder." --base main --head $BRANCH_NAME
-          )
+          BRANCH_NAME="update-version-${{ steps.gitversion.outputs.semVer }}"
+          git checkout -b $BRANCH_NAME
+          git commit -m "Automated build: Package Relabeler v${{ steps.gitversion.outputs.semVer }}"
+          git push origin $BRANCH_NAME
+          BASE_BRANCH=$(if [[ "${GITHUB_REF}" == refs/heads/releases/* ]]; then echo "${GITHUB_REF#refs/heads/}"; else echo "main"; fi)
+          gh pr create --title "Automated build: Package Relabeler v${{ steps.gitversion.outputs.semVer }}" --body "This PR rebuilds the dist folder and updates the version to ${{ steps.gitversion.outputs.semVer }}." --base $BASE_BRANCH --head $BRANCH_NAME
         env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }} # This is needed for the gh cli
 
       # Create a release if on a release branch
       - name: Create Release
