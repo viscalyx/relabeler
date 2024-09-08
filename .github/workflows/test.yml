@@ -41,10 +41,13 @@ jobs:
         with:
           files: ./coverage/lcov.info # cSpell: ignore lcov
           #token: ${{ secrets.CODECOV_TOKEN }}
+          #token: ${{ env.CODECOV_TOKEN }}
           flags: unittests # cSpell: ignore unittests
           name: relabeler-tests
           verbose: true
           fail_ci_if_error: true
+        env:
+          CODECOV_TOKEN: ${{ vars.CODECOV_TOKEN }}
 
       - name: Create artifact
         run: |
