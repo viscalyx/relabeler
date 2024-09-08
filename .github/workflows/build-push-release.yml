@@ -24,14 +24,14 @@ jobs:
 
       # Install GitVersion
       - name: Install GitVersion
-        uses: gittools/actions/gitversion/setup@v0.9.7 # cSpell: ignore gittools
+        uses: gittools/actions/gitversion/setup@v3.0.0 # cSpell: ignore gittools
         with:
           versionSpec: "6.x"
 
       # Determine the version using GitVersion
       - name: Determine Version
         id: gitversion
-        uses: gittools/actions/gitversion/execute@v0.9.7
+        uses: gittools/actions/gitversion/execute@v3.0.0
 
       # Setup Node.js environment
       - name: Use Node.js
@@ -82,7 +82,14 @@ jobs:
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }} # This is needed for the gh cli
 
-      # Create a release if on a release branch
+      # Create a preview tag if on the main branch
+      - name: Create Preview Tag
+        if: github.ref == 'refs/heads/main'
+        run: |
+          git tag v${{ steps.gitversion.outputs.semVer }}
+          git push origin v${{ steps.gitversion.outputs.semVer }}
+
+      # Create Release if on a release branch
       - name: Create Release
         if: startsWith(github.ref, 'refs/heads/releases/')
         env:
