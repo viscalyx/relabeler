@@ -15,6 +15,7 @@ on:
 
 jobs:
   relabel:
+    name: Relabeler Tests
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
@@ -29,10 +30,21 @@ jobs:
         run: npm ci
 
       - name: Build project
-        run: npm run build # Assumes you have a build script in package.json
+        run: npm run build
 
       - name: Test
-        run: npm test
+        run: |
+          npm test
+
+      - name: Upload coverage to Codecov
+        uses: codecov/codecov-action@v3
+        with:
+          files: ./coverage/lcov.info # cSpell: ignore lcov
+          #token: ${{ secrets.CODECOV_TOKEN }}
+          flags: unittests # cSpell: ignore unittests
+          name: relabeler-tests
+          verbose: true
+          fail_ci_if_error: true
 
       - name: Create artifact
         run: |
@@ -46,7 +58,13 @@ jobs:
           path: artifact/
 
       - name: Run Relabeler
+        id: relabeler
         uses: ./ # This uses the action from the root of the branch or PR
         with:
           who-to-greet: "GitHub"
           repositoryToken: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Print Relabeler Outputs
+        run: |
+          echo "Repository: ${{ steps.relabeler.outputs.repository }}"
+          echo "Time: ${{ steps.relabeler.outputs.time }}"

@@ -7,5 +7,5 @@ export default {
   },
   collectCoverage: true,
   coverageDirectory: 'coverage',
-  coverageReporters: ['cobertura', 'text'] // cSpell: ignore cobertura
-};
+  coverageReporters: ['lcov', 'text', 'cobertura'], // Generates both LCOV and Cobertura reports
+}; // cSpell: ignore lcov cobertura

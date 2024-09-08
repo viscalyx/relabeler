@@ -11,47 +11,53 @@ pr:
   - main
 
 pool:
-  vmImage: 'ubuntu-latest'
+  vmImage: "ubuntu-latest"
 
 steps:
-- task: NodeTool@0
-  inputs:
-    versionSpec: '18.x'
-  displayName: 'Install Node.js'
+  - task: NodeTool@0
+    inputs:
+      versionSpec: "18.x"
+    displayName: "Install Node.js"
 
-- script: |
-    npm install
-  displayName: 'npm install'
+  - script: |
+      npm install
+    displayName: "npm install"
 
-- script: |
-    npm run build
-  displayName: 'npm build'
+  - script: |
+      npm run build
+    displayName: "npm build"
 
-- script: |
-    npm test
-  displayName: 'npm test'
+  - script: |
+      npm test
+    displayName: "npm test and coverage"
 
-- task: PublishTestResults@2
-  condition: succeededOrFailed()
-  inputs:
-    testResultsFormat: 'JUnit'
-    testResultsFiles: '**/TEST-*.xml'
+  - task: PublishTestResults@2
+    condition: succeededOrFailed()
+    inputs:
+      testResultsFormat: "JUnit"
+      testResultsFiles: "**/TEST-*.xml"
 
-- task: PublishCodeCoverageResults@1
-  inputs:
-    codeCoverageTool: 'Cobertura' # cSpell: ignore Cobertura
-    summaryFileLocation: '$(System.DefaultWorkingDirectory)/**/*coverage.xml'
+  - task: PublishCodeCoverageResults@1
+    inputs:
+      codeCoverageTool: "Cobertura" # cSpell: ignore Cobertura
+      summaryFileLocation: "$(System.DefaultWorkingDirectory)/coverage/cobertura-coverage.xml"
 
-- task: ArchiveFiles@2
-  inputs:
-    rootFolderOrFile: '$(System.DefaultWorkingDirectory)/build'
-    includeRootFolder: false
-    archiveType: 'zip'
-    archiveFile: '$(Build.ArtifactStagingDirectory)/$(Build.BuildId).zip'
-    replaceExistingArchive: true
+  - task: PublishPipelineArtifact@1
+    inputs:
+      targetPath: "$(System.DefaultWorkingDirectory)/coverage/cobertura-coverage.xml"
+      artifact: "coverage-report"
+      publishLocation: "pipeline"
 
-- task: PublishPipelineArtifact@1
-  inputs:
-    targetPath: '$(Build.ArtifactStagingDirectory)'
-    artifact: 'drop'
-    publishLocation: 'pipeline'
+  - task: ArchiveFiles@2
+    inputs:
+      rootFolderOrFile: "$(System.DefaultWorkingDirectory)/dist"
+      includeRootFolder: false
+      archiveType: "zip"
+      archiveFile: "$(Build.ArtifactStagingDirectory)/$(Build.BuildId).zip"
+      replaceExistingArchive: true
+
+  - task: PublishPipelineArtifact@1
+    inputs:
+      targetPath: "$(Build.ArtifactStagingDirectory)"
+      artifact: "build-artifact"
+      publishLocation: "pipeline"

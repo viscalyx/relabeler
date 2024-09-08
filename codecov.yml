@@ -1,0 +1,36 @@
+coverage:
+  status:
+    project:
+      default:
+        # Thresholds for overall project coverage
+        target: 80%  # Set your desired coverage target
+        threshold: 1%  # Allowable drop in coverage
+    patch:
+      default:
+        # Thresholds for coverage of new changes
+        target: 80%  # Set your desired coverage target for new changes
+        threshold: 5%  # Allowable drop in coverage for new changes
+
+comment:
+  layout: "reach, diff, flags, files"
+  behavior: default
+  require_changes: false
+
+parsers:
+  gcov:
+    branch_detection:
+      conditional: yes
+      loop: yes
+      method: no
+      macro: no
+
+flags:
+  unittests:
+    paths:
+      - "src/"
+
+# Exclude specific files or directories from coverage
+ignore:
+  - "__tests__/"
+  - "node_modules/"
+  - "dist/"
