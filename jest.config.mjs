@@ -5,6 +5,10 @@ export default {
   transform: {
     '^.+\\.tsx?$': ['ts-jest', {}],
   },
+  reporters: [
+    "default",
+    "jest-junit"
+  ],
   collectCoverage: true,
   coverageDirectory: 'coverage',
   coverageReporters: ['lcov', 'text', 'cobertura'], // Generates both LCOV and Cobertura reports
