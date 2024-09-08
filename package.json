@@ -4,7 +4,7 @@
   "main": "dist/index.js",
   "scripts": {
     "clean": "rm -rf dist",
-    "clean:coverage": "rm -rf coverage",
+    "clean:coverage": "rm -rf coverage testResults",
     "build": "npm run clean && npx ncc build src/index.ts -o dist --source-map --license licenses.txt",
     "test": "npm run clean:coverage && jest --coverage --verbose --detectOpenHandles && npm run lint",
     "lint": "eslint 'src/**/*.{ts,js}'",
@@ -23,6 +23,7 @@
   "devDependencies": {
     "typescript": "5.3.3",
     "jest": "^29.7.0",
+    "jest-junit": "^16.0.0",
     "ts-jest": "^29.1.1",
     "@types/jest": "^29.5.11",
     "@types/axios": "^0.14.0",
@@ -37,5 +38,13 @@
     "@types/js-yaml": "^4.0.5",
     "license-checker": "^25.0.1",
     "@vercel/ncc": "^0.38.1"
+  },
+  "jest-junit": {
+    "suiteName": "Relabeler Tests",
+    "outputDirectory": "testResults",
+    "outputName": "junit.xml",
+    "reportTestSuiteErrors": "true",
+    "includeConsoleOutput": "true",
+    "ancestorSeparator": " :: "
   }
 }
