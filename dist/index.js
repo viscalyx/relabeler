@@ -33355,7 +33355,7 @@ async function run() {
         console.log('Config loaded: ', JSON.stringify(config, null, 2));
         core.debug(`Loaded config: ${JSON.stringify(config)}`);
         const time = (new Date()).toTimeString();
-        console.log(`Setting output: time=${time}`);
+        console.log(`Setting output time: ${time}`);
         core.setOutput('time', time);
     }
     catch (error) {
