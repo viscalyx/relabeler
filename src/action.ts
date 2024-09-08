@@ -18,7 +18,7 @@ export async function run() {
     core.debug(`Loaded config: ${JSON.stringify(config)}`);
 
     const time = (new Date()).toTimeString();
-    console.log(`Setting output: time=${time}`);
+    console.log(`Setting output time: ${time}`);
     core.setOutput('time', time);
   } catch (error) {
     if (error instanceof Error) {
