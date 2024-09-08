@@ -1,0 +1,48 @@
+{ // CSpell:ignore dbaeumer davidanson firsttris gruntfuggly orta usernamehw azuretools errorlens
+    "name": "Relabeler Dev Container", // A development container for Node.js and TypeScript projects with GitVersion support.
+    "dockerFile": "Dockerfile",
+    "customizations": {
+        "vscode": {
+            "settings": {
+                "terminal.integrated.shell.linux": "/bin/bash",
+                "editor.codeActionsOnSave": {
+                    "source.fixAll.eslint": "always"
+                },
+                "editor.formatOnSave": true,
+                "eslint.validate": [
+                    "javascript",
+                    "typescript"
+                ],
+                "cSpell.ignorePaths": [
+                    ".git",
+                    "settings.json"
+                ],
+                "cSpell.words": [
+                    "Relabeler",
+                    "relabeler",
+                    "unmock"
+                ],
+                "security.workspace.trust.enabled": true,
+                "security.workspace.trust.untrustedFiles": "open",
+                "security.workspace.trust.trustedFolders": [
+                    "/workspaces/relabeler"
+                ],
+                "security.workspace.trust.startupPrompt": "never"
+            },
+            "extensions": [
+                "dbaeumer.vscode-eslint",
+                "streetsidesoftware.code-spell-checker",
+                "codecov.codecov",
+                "davidanson.vscode-markdownlint",
+                "firsttris.vscode-jest-runner",
+                "gruntfuggly.todo-tree",
+                "orta.vscode-jest",
+                "redhat.vscode-yaml",
+                "usernamehw.errorlens",
+                "ms-azuretools.vscode-docker"
+            ]
+        }
+    },
+    "postCreateCommand": "npm install",
+    "remoteUser": "node"
+}
