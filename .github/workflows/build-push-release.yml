@@ -60,7 +60,13 @@ jobs:
           git config --global user.name 'GitHub Action'
           git config --global user.email 'action@github.com'
           git add package.json dist
-          git diff --quiet && git diff --staged --quiet || (git commit -m "Automated build: Update version to ${{ steps.gitversion.outputs.semVer }} and rebuild dist" && git push)
+          git diff --quiet && git diff --staged --quiet || (
+            BRANCH_NAME="update-version-${{ steps.gitversion.outputs.semVer }}"
+            git checkout -b $BRANCH_NAME
+            git commit -m "Automated build: Update version to ${{ steps.gitversion.outputs.semVer }} and rebuild dist"
+            git push origin $BRANCH_NAME
+            gh pr create --title "Automated build: Update version to ${{ steps.gitversion.outputs.semVer }}" --body "This PR updates the version to ${{ steps.gitversion.outputs.semVer }} and rebuilds the dist folder." --base main --head $BRANCH_NAME
+          )
 
       # Create a release if on a release branch
       - name: Create Release
