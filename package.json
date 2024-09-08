@@ -44,6 +44,7 @@
     "outputDirectory": "testResults",
     "outputName": "junit.xml",
     "reportTestSuiteErrors": "true",
-    "includeConsoleOutput": "true"
+    "includeConsoleOutput": "true",
+    "ancestorSeparator": " -> "
   }
 }
