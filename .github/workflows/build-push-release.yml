@@ -67,6 +67,8 @@ jobs:
             git push origin $BRANCH_NAME
             gh pr create --title "Automated build: Update version to ${{ steps.gitversion.outputs.semVer }}" --body "This PR updates the version to ${{ steps.gitversion.outputs.semVer }} and rebuilds the dist folder." --base main --head $BRANCH_NAME
           )
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       # Create a release if on a release branch
       - name: Create Release

@@ -14,7 +14,7 @@ export async function run() {
     // Load the configuration
     const workspacePath = process.env.GITHUB_WORKSPACE || '';
     const config = loadConfig(workspacePath);
-    console.log('Config loaded:', config);
+    console.log('Config loaded:', JSON.stringify(config, null, 2));
     core.debug(`Loaded config: ${JSON.stringify(config)}`);
 
     const time = (new Date()).toTimeString();
