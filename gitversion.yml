@@ -14,7 +14,7 @@ branches:
   feature:
     label: "{BranchName}"
     increment: Minor
-    regex: ^f(eature(s)?)?[\/-](?<BranchName>.+)
+    regex: ^f(eature(s)?)?[\/-](?<BranchName>.+) # cSpell: ignore eature
     source-branches: ["main"]
   hotfix:
     label: fix
