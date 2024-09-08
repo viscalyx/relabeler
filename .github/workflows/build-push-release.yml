@@ -77,6 +77,7 @@ jobs:
       - name: Commit and push if changed
         if: steps.check_dist_changes.outputs.dist_changed == 'true'
         run: |
+          git status
           git config --global user.name 'GitHub Action'
           git config --global user.email 'action@github.com'
           BRANCH_NAME="update-version-${{ steps.gitversion.outputs.semVer }}"

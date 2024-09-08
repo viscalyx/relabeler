@@ -1,8 +1,9 @@
+# cSpell: ignore eature atch hange reaking inor
 mode: ContinuousDelivery
 next-version: 0.0.1
-major-version-bump-message: '(breaking\schange|breaking)\b'
-minor-version-bump-message: '(adds?|minor)\b'
-patch-version-bump-message: '\s?(fix|patch)'
+major-version-bump-message: '([Bb]reaking\s[Cc]hange|[Bb]reaking)\b'
+minor-version-bump-message: '([Aa]dds?|[Mm]inor)\b'
+patch-version-bump-message: '\s?([Ff]ix|[Pp]atch)'
 no-bump-message: '\+semver:\s?(none|skip)'
 assembly-informational-format: "{SemVer}+Sha.{Sha}.Date.{CommitDate}"
 branches:
@@ -14,7 +15,7 @@ branches:
   feature:
     label: "{BranchName}"
     increment: Minor
-    regex: ^f(eature(s)?)?[\/-](?<BranchName>.+) # cSpell: ignore eature
+    regex: ^f(eature(s)?)?[\/-](?<BranchName>.+)
     source-branches: ["main"]
   hotfix:
     label: fix
