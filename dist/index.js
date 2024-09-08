@@ -33361,7 +33361,7 @@ async function run() {
     catch (error) {
         if (error instanceof Error) {
             if (!error.message.startsWith('Mock')) {
-                console.error('Error in run function:', error);
+                console.error('Error in run function: ', error);
             }
             core.setFailed(error.message);
         }
