@@ -52,10 +52,10 @@ jobs:
         id: check_dist_changes
         run: |
           git add dist
-          if git diff --cached --quiet; then
-            echo "dist_changed=false" >> "$GITHUB_OUTPUT"
-          else
+          if [ -n "$(git diff --name-only --staged)" ]; then
             echo "dist_changed=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "dist_changed=false" >> "$GITHUB_OUTPUT"
           fi
 
       # Update the version in package.json if dist has changed
