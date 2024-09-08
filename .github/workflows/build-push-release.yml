@@ -51,12 +51,18 @@ jobs:
       - name: Check for dist changes
         id: check_dist_changes
         run: |
+          git status
           git add dist
           if [ -n "$(git diff --name-only --staged)" ]; then
-            echo "dist_changed=true" >> "$GITHUB_OUTPUT"
+            echo "dist_changed=true" >> $GITHUB_OUTPUT
           else
-            echo "dist_changed=false" >> "$GITHUB_OUTPUT"
+            echo "dist_changed=false" >> $GITHUB_OUTPUT
           fi
+
+      # Notify if no changes to release or pre-release
+      - name: Notify no changes
+        if: steps.check_dist_changes.outputs.dist_changed == 'false'
+        run: echo "::notice::There were no changes to release or pre-release."
 
       # Update the version in package.json if dist has changed
       - name: Update package.json version
