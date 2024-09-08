@@ -104,7 +104,9 @@ jobs:
           gh release create v${{ steps.gitversion.outputs.semVer }} \
             --title "Preview Release ${{ steps.gitversion.outputs.semVer }}" \
             --notes "This is a preview release for version ${{ steps.gitversion.outputs.semVer }}." \
-            --draft
+            --generate-notes \
+            --notes-start-tag "v${{ steps.gitversion.outputs.semVer }}" \
+            --prerelease
 
       # Create Release if on a release branch and dist has changed
       - name: Create Release
