@@ -3,13 +3,13 @@ coverage:
     project:
       default:
         # Thresholds for overall project coverage
-        target: 80%  # Set your desired coverage target
-        threshold: 1%  # Allowable drop in coverage
+        target: 80% # Set your desired coverage target
+        threshold: 1% # Allowable drop in coverage
     patch:
       default:
         # Thresholds for coverage of new changes
-        target: 80%  # Set your desired coverage target for new changes
-        threshold: 5%  # Allowable drop in coverage for new changes
+        target: 80% # Set your desired coverage target for new changes
+        threshold: 5% # Allowable drop in coverage for new changes
 
 comment:
   layout: "reach, diff, flags, files"
