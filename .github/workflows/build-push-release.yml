@@ -32,6 +32,9 @@ jobs:
       - name: Determine Version
         id: gitversion
         uses: gittools/actions/gitversion/execute@v3.0.0
+        with:
+          useConfigFile: true
+          configFilePath: gitversion.yml
 
       # Setup Node.js environment
       - name: Use Node.js
@@ -71,7 +74,7 @@ jobs:
           VERSION=${{ steps.gitversion.outputs.semVer }}
           echo "Updating package.json version to $VERSION"
           npm version $VERSION --no-git-tag-version
-          git add package.json
+          git add package.json package-lock.json
 
       # Commit and push changes if there are any
       - name: Commit and push if changed
