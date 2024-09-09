@@ -1,4 +1,5 @@
 {
+    "terminal.integrated.shell.linux": "/bin/bash",
     "editor.codeActionsOnSave": {
         "source.fixAll.eslint": "always"
     },
@@ -15,5 +16,6 @@
         "Relabeler",
         "relabeler",
         "unmock"
-    ]
+    ],
+    "extensions.ignoreRecommendations": true
 }
