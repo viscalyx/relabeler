@@ -92,17 +92,26 @@ graph TD
     PathText ~~~ B
     PathText ~~~ C
 
-    A -->|See trigger 1| B[Tests Workflow]
-    A -->|See trigger 1| C[Build, Push, and Release Workflow]
+    subgraph Workflows
+        direction LR
+        B[Tests Workflow]
+        C[Build, Push, and Release Workflow]
+        G[Create Release Branch Workflow]
+    end
+
+    A -->|See trigger 1| B
+    A -->|See trigger 1| C
     D -->|See trigger 2| B
     E -->|See trigger 1| B
     E -->|See trigger 1| C
-    F --> G[Create Release Branch Workflow]
+    F --> G
 
-    B --> Y[Build project]
+    B --> AA{Are there changes to dist folder?}
+    AA -->|Yes| Z((Workflow fails))
+    AA -->|No| Y[Build project]
     Y --> H{Tests pass?}
     H -->|Yes| I[Upload coverage to Codecov]
-    H -->|No| Z((Workflow fails))
+    H -->|No| Z
     I --> J[Upload test results to Codecov]
     J --> K[Create and upload artifact]
     K --> L[Run Relabeler]
