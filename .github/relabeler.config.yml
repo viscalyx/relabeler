@@ -61,7 +61,8 @@ pulls:
           - when:
               canBeMerged: true
           - when:
-              labeled: waiting for author response
+              labeled:
+                - waiting for author response
 
     - label:
         name: "ready for merge"
