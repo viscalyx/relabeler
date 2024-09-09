@@ -19,25 +19,25 @@ pulls:
           - when:
               statuses:
                 license/cla: success
-              canBeMerged: no
+              canBeMerged: false
           - when:
               statuses:
                 license/cla: success
-              reviewRequestChange: yes # Means GitHub Review comment (change without LGTM comment, or blocked)
+              reviewRequestChange: true # Means GitHub Review comment (change without LGTM comment, or blocked)
         remove:
           - when:
               statuses:
                 continuous-integration/appveyor/pr: success
                 license/cla: success
-              canBeMerged: yes
+              canBeMerged: true
               # To determine this, maybe each review comment int he PR must be evaluated, to finally get true or false.
-              reviewResponseToRequestChange: yes # Means one or more GitHub review comments that starts with 'Done'.
-              onPush: yes
+              reviewResponseToRequestChange: true # Means one or more GitHub review comments that starts with 'Done'.
+              onPush: true
           - when:
               labeled:
                 - on hold
           - when:
-              reviewApproved: yes
+              reviewApproved: true
 
     - label:
         name: "needs review"
@@ -46,11 +46,11 @@ pulls:
               statuses:
                 continuous-integration/appveyor/pr: success
                 license/cla: success
-              canBeMerged: yes
-              reviewResponseToRequestChange: yes
+              canBeMerged: true
+              reviewResponseToRequestChange: true
               notLabeled:
                 - waiting for author response
-              onPush: yes
+              onPush: true
         remove:
           - when:
               statuses:
@@ -59,7 +59,7 @@ pulls:
               statuses:
                 license/cla: pending
           - when:
-              canBeMerged: yes
+              canBeMerged: true
           - when:
               labeled: waiting for author response
 
@@ -70,7 +70,7 @@ pulls:
               notLabeled:
                 - waiting for author response
                 - waiting for code fix
-              reviewApproved: yes # This could check that only be true if there are no pushes after last approval.
+              reviewApproved: true # This could check that only be true if there are no pushes after last approval.
         remove:
           - when:
               labeled:
