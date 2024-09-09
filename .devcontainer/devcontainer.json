@@ -1,4 +1,4 @@
-{ // CSpell:ignore dbaeumer davidanson firsttris gruntfuggly orta usernamehw azuretools errorlens
+{ // CSpell:ignore dbaeumer davidanson firsttris gruntfuggly orta usernamehw azuretools errorlens bierner
     "name": "Relabeler Dev Container", // A development container for Node.js and TypeScript projects with GitVersion support.
     "dockerFile": "Dockerfile",
     "build": {
