@@ -25,11 +25,7 @@ If you find a bug or have a feature request, please open an issue [here](https:/
 - Write clear, concise commit messages.
 - Add comments where necessary.
 
-## Testing
-
-Please ensure that your changes pass any existing tests and add new tests for any new features.
-
-## Building, Packaging, and Releasing
+## Building, Testing, Packaging, and Releasing
 
 ### Building
 
@@ -40,6 +36,10 @@ npm run build
 ```
 
 This will compile the TypeScript files in the `src` directory into JavaScript files in the `dist` directory.
+
+## Testing
+
+Please ensure that your changes pass any existing tests and add new tests for any new features.
 
 ### Packaging
 
@@ -75,6 +75,63 @@ The project uses GitVersion to manage semantic versioning. The version is determ
 
 - **Stable Releases**: Use the action with a specific version tag, e.g., `@v1`.
 - **Bleeding Edge**: Use the action with the `main` branch for the latest changes, e.g., `@main`.
+
+## Workflows
+
+This illustrates the GitHub Actions workflows in this repository.
+
+```mermaid
+graph TD
+    A{{Push to main branch}}
+    D{{Pull request to main}}
+    E{{Push to releases/** branch}}
+    F{{Push tag vx.x.x}}
+
+    PathText["Trigger 1: Paths: src/**, package.json, package-lock.json
+    Trigger 2: On all changes"]
+    PathText ~~~ B
+    PathText ~~~ C
+
+    A -->|See trigger 1| B[Tests Workflow]
+    A -->|See trigger 1| C[Build, Push, and Release Workflow]
+    D -->|See trigger 2| B
+    E -->|See trigger 1| B
+    E -->|See trigger 1| C
+    F --> G[Create Release Branch Workflow]
+
+    B --> Y[Build project]
+    Y --> H{Tests pass?}
+    H -->|Yes| I[Upload coverage to Codecov]
+    H -->|No| Z((Workflow fails))
+    I --> J[Upload test results to Codecov]
+    J --> K[Create and upload artifact]
+    K --> L[Run Relabeler]
+
+    C --> X[Build project]
+    X --> M{Check for dist changes}
+    M -->|No changes| N[Notify no changes]
+    M -->|Changes| O[Update package.json version]
+    O --> P[Create PR with changes for pushed branch]
+    P --> Q{On main branch?}
+    P --> T{On releases/** branch?}
+
+    Q -->|Yes| R[Create preview tag]
+    R --> S[Create GitHub Preview Release]
+
+    T -->|Yes| U[Create GitHub Release]
+
+    G --> V[Create new release branch]
+    V --> W[Push new release branch]
+
+    classDef subprocess stroke-width:4px,stroke-dasharray: 5 5;
+    class B,C,G subprocess;
+    classDef eventTrigger fill:#e1f5fe,stroke:#333,stroke-width:2px,color:#000;
+    class A,D,E,F eventTrigger;
+    classDef invisible fill:none,stroke:none;
+    class PathText invisible;
+    classDef failure fill:#FFA07A,stroke:#FF0000,stroke-width:2px,color:#000;
+    class Z failure;
+```
 
 ## License
 
