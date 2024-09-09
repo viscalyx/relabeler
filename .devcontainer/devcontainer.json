@@ -1,6 +1,12 @@
 { // CSpell:ignore dbaeumer davidanson firsttris gruntfuggly orta usernamehw azuretools errorlens
     "name": "Relabeler Dev Container", // A development container for Node.js and TypeScript projects with GitVersion support.
     "dockerFile": "Dockerfile",
+    "build": {
+        "context": "..",
+        "args": {
+            // Add any build arguments here if needed
+        }
+    },
     "customizations": {
         "vscode": {
             "settings": {
@@ -39,10 +45,14 @@
                 "orta.vscode-jest",
                 "redhat.vscode-yaml",
                 "usernamehw.errorlens",
-                "ms-azuretools.vscode-docker"
+                "ms-azuretools.vscode-docker",
+                "bierner.markdown-mermaid"
             ]
         }
     },
-    "postCreateCommand": "npm install",
-    "remoteUser": "node"
+    "postCreateCommand": "npm install", // Runs when the dev container has been assigned to a user for the first time.
+    //"postStartCommand": "bash", // Runs each time the container is successfully started
+    "remoteUser": "node", // The user to use when connecting to the container
+    "workspaceMount": "source=${localWorkspaceFolder},target=/workspaces/relabeler,type=bind,consistency=cached",
+    "workspaceFolder": "/workspaces/relabeler"
 }

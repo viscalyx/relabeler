@@ -99,8 +99,8 @@ jobs:
           git tag v${{ steps.gitversion.outputs.semVer }}
           git push origin v${{ steps.gitversion.outputs.semVer }}
 
-      # Create a draft release for the preview tag if on the main branch and dist has changed
-      - name: Create Draft Release
+      # Create a preview release for the preview tag if on the main branch and dist has changed
+      - name: Create GitHub Preview Release
         if: github.ref == 'refs/heads/main' && steps.check_dist_changes.outputs.dist_changed == 'true'
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -113,7 +113,7 @@ jobs:
             --prerelease
 
       # Create Release if on a release branch and dist has changed
-      - name: Create Release
+      - name: Create GitHub Release
         if: startsWith(github.ref, 'refs/heads/releases/') && steps.check_dist_changes.outputs.dist_changed == 'true'
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
