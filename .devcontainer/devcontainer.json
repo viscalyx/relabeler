@@ -11,23 +11,6 @@
         "vscode": {
             "settings": {
                 "terminal.integrated.shell.linux": "/bin/bash",
-                "editor.codeActionsOnSave": {
-                    "source.fixAll.eslint": "always"
-                },
-                "editor.formatOnSave": true,
-                "eslint.validate": [
-                    "javascript",
-                    "typescript"
-                ],
-                "cSpell.ignorePaths": [
-                    ".git",
-                    "settings.json"
-                ],
-                "cSpell.words": [
-                    "Relabeler",
-                    "relabeler",
-                    "unmock"
-                ],
                 "security.workspace.trust.enabled": true,
                 "security.workspace.trust.untrustedFiles": "open",
                 "security.workspace.trust.trustedFolders": [
