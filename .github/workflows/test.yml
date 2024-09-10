@@ -32,9 +32,11 @@ jobs:
         run: |
           git remote -v
           git fetch origin ${{ github.base_ref }}
+          echo "Commits in diff:"
+          git log --oneline origin/${{ github.base_ref }}..HEAD
           echo "Files in diff:"
-          git diff --name-only ${{ github.event.pull_request.base.sha }} ${{ github.event.pull_request.head.sha }}
-          if git git diff --name-only ${{ github.event.pull_request.base.sha }} ${{ github.event.pull_request.head.sha }} | grep -q "^dist/"; then
+          git diff --name-only origin/${{ github.base_ref }}..HEAD
+          if git diff --name-only origin/${{ github.base_ref }}..HEAD | grep -q "^dist/"; then
             echo "::error::Changes detected in the dist folder. It is not allowed to push dist in a pull request."
             exit 1
           fi
