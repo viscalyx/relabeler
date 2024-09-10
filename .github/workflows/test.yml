@@ -68,7 +68,7 @@ jobs:
           cp -r dist package.json package-lock.json artifact/
 
       - name: Upload artifact
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: build-artifact
           path: artifact/
