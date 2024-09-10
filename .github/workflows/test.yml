@@ -31,7 +31,6 @@ jobs:
         if: success() && github.event_name == 'pull_request'
         run: |
           git remote -v
-          git log --oneline origin/main..HEAD
           git fetch origin ${{ github.base_ref }}
           git log --oneline origin/main..HEAD
           git diff --name-only origin/${{ github.base_ref }}..HEAD
