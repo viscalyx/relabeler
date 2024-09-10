@@ -39,7 +39,59 @@ This will compile the TypeScript files in the `src` directory into JavaScript fi
 
 ## Testing
 
-Please ensure that your changes pass any existing tests and add new tests for any new features.
+Please ensure that your changes pass all existing tests and add new tests for any new features.
+
+### Running Tests
+
+To run the tests, use the following command:
+
+```bash
+npm test
+```
+
+This command will:
+
+1. Clean the coverage directory
+2. Run Jest tests with coverage and verbose output
+3. Run the linter
+
+If you want to run only the Jest tests without cleaning or linting, you can use:
+
+```bash
+npx jest
+```
+
+### Running Individual Tests
+
+To run a specific test file, use:
+
+```bash
+npx jest path/to/your/test-file.test.ts
+```
+
+Replace `path/to/your/test-file.test.ts` with the actual path to the test file you want to run.
+
+To run a specific test or test suite within a file, use the `-t` flag followed by a name pattern:
+
+```bash
+npx jest path/to/your/test-file.test.ts -t "name of your test"
+```
+
+This will run only the tests whose names match the provided pattern.
+
+### Linting
+
+To run the linter separately:
+
+```bash
+npm run lint
+```
+
+To automatically fix linting issues:
+
+```bash
+npm run lint:fix
+```
 
 ### Packaging
 
@@ -66,15 +118,19 @@ Releases are managed using GitHub Actions and GitVersion for semantic versioning
 
 The project uses GitVersion to manage semantic versioning. The version is determined based on the commit history and branch names.
 
-- **Major Changes**: Include `+semver: major` or `+semver: breaking` in your commit message.
-- **Minor Changes**: Include `+semver: minor` or `+semver: feature` in your commit message.
-- **Patch Changes**: Include `+semver: patch` or `+semver: fix` in your commit message (or let it default to patch).
+- **Major Changes**: Include `breaking change` or `breaking` (case-insensitive) in your commit message.
+- **Minor Changes**: Include `adds`, `add`, or `minor` (case-insensitive) in your commit message.
+- **Patch Changes**: Include `fix` or `patch` (case-insensitive) in your commit message.
 - **No Version Bump**: Include `+semver: none` or `+semver: skip` in your commit message.
 
-### Using the Action
+<!-- cSpell:ignore hotfixes -->
+Branch naming conventions also affect versioning:
 
-- **Stable Releases**: Use the action with a specific version tag, e.g., `@v1`.
-- **Bleeding Edge**: Use the action with the `main` branch for the latest changes, e.g., `@main`.
+- Feature branches (`feature/...` or `features/...`) increment the minor version.
+- Hotfix branches (`fix/...`, `fixes/...`, `hotfix/...`, or `hotfixes/...`) increment the patch version.
+- Release branches (`releases/...` or `release/...`) increment the patch version.
+
+The main branch is labeled as 'preview' in the version.
 
 ## Workflows
 
