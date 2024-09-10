@@ -30,8 +30,8 @@ jobs:
       - name: Check for changes in dist folder
         if: success() && github.event_name == 'pull_request'
         run: |
-          git log --oneline origin/main..${{ github.base_ref }}
           git remote -v
+          git log --oneline origin/main..${{ github.base_ref }}
           git fetch origin ${{ github.base_ref }}
           git log --oneline origin/main..${{ github.base_ref }}
           git diff --name-only origin/${{ github.base_ref }}..HEAD
