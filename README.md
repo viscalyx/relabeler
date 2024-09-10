@@ -28,6 +28,13 @@ jobs:
             repositoryToken: ${{ secrets.GITHUB_TOKEN }}
 ```
 
+### Using the Action
+
+- **Stable Releases**: Use the action with a specific version tag, e.g., `@v1`.
+- **Preview Releases**:
+  - For the latest (bleeding edge): Use the action with the `main` branch, e.g., `@main`.
+  - For a specific preview version: Use a specific preview tag, e.g., `@v1.2.3-preview.12`.
+
 ## Inputs
 
 | Input            | Description                      | Required | Default |
