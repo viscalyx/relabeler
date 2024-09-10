@@ -30,6 +30,7 @@ jobs:
       - name: Check for changes in dist folder
         if: success() && github.event_name == 'pull_request'
         run: |
+          git fetch origin ${{ github.base_ref }}
           if git diff --name-only ${{ github.event.pull_request.base.sha }} ${{ github.event.pull_request.head.sha }} | grep -q "^dist/"; then
             echo "::error::Changes detected in the dist folder. It is not allowed to push dist in a pull request."
             exit 1
