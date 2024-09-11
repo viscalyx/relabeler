@@ -28,13 +28,13 @@ jobs:
         id: check_sarif
         run: |
           if [ -f testResults/hadolint-results.sarif ]; then
-            echo "::set-output name=file_exists::true"
+            echo "file_exists=true" >> $GITHUB_OUTPUT
           else
-            echo "::set-output name=file_exists::false"
+            echo "file_exists=false" >> $GITHUB_OUTPUT
           fi
 
       - name: Upload SARIF file
-        uses: github/codeql-action/upload-sarif@v2
+        uses: github/codeql-action/upload-sarif@v3
         if: always() && steps.check_sarif.outputs.file_exists == 'true'
         with:
           sarif_file: testResults/hadolint-results.sarif
