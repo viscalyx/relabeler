@@ -36,7 +36,7 @@ export function loadConfig(repoPath: string, configPath?: string): RelabelerConf
         configFilePath = foundConfigPath;
     }
 
-    console.log('Config file path: ', configFilePath);
+    console.log('Using configuration file from path: ', configFilePath);
 
     const fileContents = fs.readFileSync(configFilePath, 'utf8');
     const config = yaml.load(fileContents) as RelabelerConfig;
