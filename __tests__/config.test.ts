@@ -36,17 +36,22 @@ describe('loadConfig', () => {
         };
     });
 
-    context('When loading config', () => {
+    context('When loading default config', () => {
         beforeEach(() => {
             // Reset all mocks before each test
             jest.resetAllMocks();
         });
 
-        it('should load config from .github folder', () => {
+        it('should load config from .github folder if found', () => {
             // Mock path.join to simply join arguments with '/'
             (path.join as jest.Mock).mockImplementation((...args) => args.join('/'));
-            // Mock fs.existsSync to return true only for paths containing '.github'
-            (fs.existsSync as jest.Mock).mockImplementation((path: unknown) => typeof path === 'string' && path.includes('.github'));
+            // Mock fs.existsSync to return true only for the .github path
+            (fs.existsSync as jest.Mock).mockImplementation((path: unknown) => {
+                if (typeof path === 'string' && path.includes('.github')) {
+                    return true;
+                }
+                return false;
+            });
             // Mock fs.readFileSync to return a stringified version of mockConfig
             (fs.readFileSync as jest.Mock).mockReturnValue(JSON.stringify(mockConfig));
             // Mock yaml.load to return mockConfig
@@ -57,17 +62,22 @@ describe('loadConfig', () => {
 
             // Assert that the result matches our mockConfig
             expect(result).toEqual(mockConfig);
-            // Check that fs.existsSync was called with the correct path
+            // Check that fs.existsSync was called with both paths
             expect(fs.existsSync).toHaveBeenCalledWith('/repo/path/.github/relabeler.config.yml');
             // Check that fs.readFileSync was called with the correct path and encoding
             expect(fs.readFileSync).toHaveBeenCalledWith('/repo/path/.github/relabeler.config.yml', 'utf8');
         });
 
-        it('should load config from root folder if not found in .github', () => {
+        it('should load config from root folder if found', () => {
             // Mock path.join to simply join arguments with '/'
             (path.join as jest.Mock).mockImplementation((...args) => args.join('/'));
-            // Mock fs.existsSync to return true only for paths not containing '.github'
-            (fs.existsSync as jest.Mock).mockImplementation((path: unknown) => typeof path === 'string' && !path.includes('.github'));
+            // Mock fs.existsSync to return true only for the root path
+            (fs.existsSync as jest.Mock).mockImplementation((path: unknown) => {
+                if (typeof path === 'string' && !path.includes('.github')) {
+                    return true;
+                }
+                return false;
+            });
             // Mock fs.readFileSync to return a stringified version of mockConfig
             (fs.readFileSync as jest.Mock).mockReturnValue(JSON.stringify(mockConfig));
             // Mock yaml.load to return mockConfig
@@ -79,10 +89,36 @@ describe('loadConfig', () => {
             // Assert that the result matches our mockConfig
             expect(result).toEqual(mockConfig);
             // Check that fs.existsSync was called for both .github and root paths
-            expect(fs.existsSync).toHaveBeenCalledWith('/repo/path/.github/relabeler.config.yml');
             expect(fs.existsSync).toHaveBeenCalledWith('/repo/path/relabeler.config.yml');
             // Check that fs.readFileSync was called with the correct path and encoding
             expect(fs.readFileSync).toHaveBeenCalledWith('/repo/path/relabeler.config.yml', 'utf8');
+        });
+    });
+
+    context('When loading config from custom path', () => {
+        beforeEach(() => {
+            // Reset all mocks before each test
+            jest.resetAllMocks();
+        });
+
+        it('should load config from specified path', () => {
+            (path.join as jest.Mock).mockImplementation((...args) => args.join('/'));
+            (fs.existsSync as jest.Mock).mockReturnValue(true);
+            (fs.readFileSync as jest.Mock).mockReturnValue(JSON.stringify(mockConfig));
+            (yaml.load as jest.Mock).mockReturnValue(mockConfig);
+
+            const result = loadConfig('/repo/path', 'custom/path/config.yml');
+
+            expect(result).toEqual(mockConfig);
+            expect(fs.existsSync).toHaveBeenCalledWith('/repo/path/custom/path/config.yml');
+            expect(fs.readFileSync).toHaveBeenCalledWith('/repo/path/custom/path/config.yml', 'utf8');
+        });
+
+        it('should throw an error if specified config file is not found', () => {
+            (path.join as jest.Mock).mockImplementation((...args) => args.join('/'));
+            (fs.existsSync as jest.Mock).mockReturnValue(false);
+
+            expect(() => loadConfig('/repo/path', 'custom/path/config.yml')).toThrow('Config file not found at specified path: /repo/path/custom/path/config.yml');
         });
     });
 
@@ -92,7 +128,7 @@ describe('loadConfig', () => {
             (fs.existsSync as jest.Mock).mockReturnValue(false);
 
             // Assert that calling loadConfig throws an error with the correct message
-            expect(() => loadConfig('/repo/path')).toThrow('Config file not found');
+            expect(() => loadConfig('/repo/path')).toThrow('No config file was found in any of the default paths');
         });
     });
 

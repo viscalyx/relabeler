@@ -11,6 +11,9 @@ inputs:
   repositoryToken:
     required: true
     description: "The GitHub repository token"
+  configPath:
+    description: "Path to the configuration file relative to the repository root"
+    required: false
 outputs:
   time:
     description: "The time we greeted you"

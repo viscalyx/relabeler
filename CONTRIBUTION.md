@@ -68,8 +68,13 @@ To run a specific test file, use:
 ```bash
 npx jest path/to/your/test-file.test.ts
 ```
-
 Replace `path/to/your/test-file.test.ts` with the actual path to the test file you want to run.
+
+To run a specific test file, use the `--coverage=false`:
+
+```bash
+npx jest --coverage=false path/to/your/test-file.test.ts
+```
 
 To run a specific test or test suite within a file, use the `-t` flag followed by a name pattern:
 
