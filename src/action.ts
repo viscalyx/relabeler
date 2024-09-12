@@ -8,12 +8,19 @@ export async function run() {
     const repoName = github.context.repo.repo;
     const repoOwner = github.context.repo.owner;
 
-    console.log(`Setting output: repository=${repoOwner}/${repoName}`);
-    core.setOutput('repository', `${repoOwner}/${repoName}`);
+    // Set repository output
+    const repositoryOutput = `${repoOwner}/${repoName}`;
+    console.log(`Setting output: repository=${repositoryOutput}`);
+    core.setOutput('repository', repositoryOutput);
 
     // Load the configuration
     const workspacePath = process.env.GITHUB_WORKSPACE || '';
-    const config = loadConfig(workspacePath);
+    console.log('Workspace path: ', workspacePath);
+
+    const configPath = core.getInput('configPath');
+    console.log('Input config path: ', configPath);
+
+    const config = loadConfig(workspacePath, configPath || undefined);
     console.log('Config loaded: ', JSON.stringify(config, null, 2));
     core.debug(`Loaded config: ${JSON.stringify(config)}`);
 

@@ -25,11 +25,7 @@ If you find a bug or have a feature request, please open an issue [here](https:/
 - Write clear, concise commit messages.
 - Add comments where necessary.
 
-## Testing
-
-Please ensure that your changes pass any existing tests and add new tests for any new features.
-
-## Building, Packaging, and Releasing
+## Building, Testing, Packaging, and Releasing
 
 ### Building
 
@@ -40,6 +36,67 @@ npm run build
 ```
 
 This will compile the TypeScript files in the `src` directory into JavaScript files in the `dist` directory.
+
+## Testing
+
+Please ensure that your changes pass all existing tests and add new tests for any new features.
+
+### Running Tests
+
+To run the tests, use the following command:
+
+```bash
+npm test
+```
+
+This command will:
+
+1. Clean the coverage directory
+2. Run Jest tests with coverage and verbose output
+3. Run the linter
+
+If you want to run only the Jest tests without cleaning or linting, you can use:
+
+```bash
+npx jest
+```
+
+### Running Individual Tests
+
+To run a specific test file, use:
+
+```bash
+npx jest path/to/your/test-file.test.ts
+```
+Replace `path/to/your/test-file.test.ts` with the actual path to the test file you want to run.
+
+To run a specific test file, use the `--coverage=false`:
+
+```bash
+npx jest --coverage=false path/to/your/test-file.test.ts
+```
+
+To run a specific test or test suite within a file, use the `-t` flag followed by a name pattern:
+
+```bash
+npx jest path/to/your/test-file.test.ts -t "name of your test"
+```
+
+This will run only the tests whose names match the provided pattern.
+
+### Linting
+
+To run the linter separately:
+
+```bash
+npm run lint
+```
+
+To automatically fix linting issues:
+
+```bash
+npm run lint:fix
+```
 
 ### Packaging
 
@@ -66,15 +123,85 @@ Releases are managed using GitHub Actions and GitVersion for semantic versioning
 
 The project uses GitVersion to manage semantic versioning. The version is determined based on the commit history and branch names.
 
-- **Major Changes**: Include `+semver: major` or `+semver: breaking` in your commit message.
-- **Minor Changes**: Include `+semver: minor` or `+semver: feature` in your commit message.
-- **Patch Changes**: Include `+semver: patch` or `+semver: fix` in your commit message (or let it default to patch).
+- **Major Changes**: Include `breaking change` or `breaking` (case-insensitive) in your commit message.
+- **Minor Changes**: Include `adds`, `add`, or `minor` (case-insensitive) in your commit message.
+- **Patch Changes**: Include `fix` or `patch` (case-insensitive) in your commit message.
 - **No Version Bump**: Include `+semver: none` or `+semver: skip` in your commit message.
 
-### Using the Action
+<!-- cSpell:ignore hotfixes -->
+Branch naming conventions also affect versioning:
 
-- **Stable Releases**: Use the action with a specific version tag, e.g., `@v1`.
-- **Bleeding Edge**: Use the action with the `main` branch for the latest changes, e.g., `@main`.
+- Feature branches (`feature/...` or `features/...`) increment the minor version.
+- Hotfix branches (`fix/...`, `fixes/...`, `hotfix/...`, or `hotfixes/...`) increment the patch version.
+- Release branches (`releases/...` or `release/...`) increment the patch version.
+
+The main branch is labeled as 'preview' in the version.
+
+## Workflows
+
+This illustrates the GitHub Actions workflows in this repository.
+
+```mermaid
+graph TD
+    A{{Push to main branch}}
+    D{{Pull request to main}}
+    E{{Push to releases/** branch}}
+    F{{Push tag vx.x.x}}
+
+    PathText["Trigger 1: Paths: src/**, package.json, package-lock.json
+    Trigger 2: On all changes"]
+    PathText ~~~ B
+    PathText ~~~ C
+
+    subgraph Workflows
+        direction LR
+        B[Tests Workflow]
+        C[Build, Push, and Release Workflow]
+        G[Create Release Branch Workflow]
+    end
+
+    A -->|See trigger 1| B
+    A -->|See trigger 1| C
+    D -->|See trigger 2| B
+    E -->|See trigger 1| B
+    E -->|See trigger 1| C
+    F --> G
+
+    B --> AA{Are there changes to dist folder?}
+    AA -->|Yes| Z((Workflow fails))
+    AA -->|No| Y[Build project]
+    Y --> H{Tests pass?}
+    H -->|Yes| I[Upload coverage to Codecov]
+    H -->|No| Z
+    I --> J[Upload test results to Codecov]
+    J --> K[Create and upload artifact]
+    K --> L[Run Relabeler]
+
+    C --> X[Build project]
+    X --> M{Check for dist changes}
+    M -->|No changes| N[Notify no changes]
+    M -->|Changes| O[Update package.json version]
+    O --> P[Create PR with changes for pushed branch]
+    P --> Q{On main branch?}
+    P --> T{On releases/** branch?}
+
+    Q -->|Yes| R[Create preview tag]
+    R --> S[Create GitHub Preview Release]
+
+    T -->|Yes| U[Create GitHub Release]
+
+    G --> V[Create new release branch]
+    V --> W[Push new release branch]
+
+    classDef subprocess stroke-width:4px,stroke-dasharray: 5 5;
+    class B,C,G subprocess;
+    classDef eventTrigger fill:#e1f5fe,stroke:#333,stroke-width:2px,color:#000;
+    class A,D,E,F eventTrigger;
+    classDef invisible fill:none,stroke:none;
+    class PathText invisible;
+    classDef failure fill:#FFA07A,stroke:#FF0000,stroke-width:2px,color:#000;
+    class Z failure;
+```
 
 ## License
 

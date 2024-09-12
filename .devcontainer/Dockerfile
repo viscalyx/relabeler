@@ -2,6 +2,9 @@
 #FROM mcr.microsoft.com/vscode/devcontainers/javascript-node:0-18
 FROM mcr.microsoft.com/devcontainers/typescript-node:18
 
+# Add a label to name your image
+LABEL name="relabeler-dev"
+
 # Set environment variables for versions
 # Debian version should be the same as the base image.
 ENV DEBIAN_VERSION=12

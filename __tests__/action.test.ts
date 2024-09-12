@@ -102,7 +102,7 @@ describe('Relabeler', () => {
 
       expect(mockedCore.setOutput).toHaveBeenCalledWith('repository', 'testOwner/testRepo');
       expect(mockedCore.setOutput).toHaveBeenCalledWith('time', expect.any(String));
-      expect(loadConfig).toHaveBeenCalledWith('/test/workspace');
+      expect(loadConfig).toHaveBeenCalledWith('/test/workspace', undefined);
       expect(mockedCore.debug).toHaveBeenCalledWith(`Loaded config: ${JSON.stringify(mockConfig)}`);
     });
 
@@ -167,6 +167,29 @@ describe('Relabeler', () => {
     });
   });
 
+  context('When using custom config path', () => {
+    it('should load config from specified path', async () => {
+      const customConfigPath = 'custom/path/config.yml';
+
+      // Mock core.getInput to return the custom config path
+      mockedCore.getInput.mockReturnValue(customConfigPath);
+
+      (loadConfig as jest.MockedFunction<typeof loadConfig>).mockImplementation((workspace: string, configPath?: string) => {
+        expect(workspace).toBe('/test/workspace');
+        expect(configPath).toBe(customConfigPath);
+        return mockConfig;
+      });
+
+      await run();
+
+      expect(mockedCore.getInput).toHaveBeenCalledWith('configPath');
+      expect(mockedCore.setOutput).toHaveBeenCalledWith('repository', 'testOwner/testRepo');
+      expect(mockedCore.setOutput).toHaveBeenCalledWith('time', expect.any(String));
+      expect(loadConfig).toHaveBeenCalledWith('/test/workspace', customConfigPath);
+      expect(mockedCore.debug).toHaveBeenCalledWith(`Loaded config: ${JSON.stringify(mockConfig)}`);
+    });
+  });
+
   // This test needs to be at the end of the file because it modifies the github mock
   // in a way that can affect other tests. Keeping it at the end minimizes its impact.
   context('When action fails', () => {
@@ -212,6 +235,8 @@ describe('Relabeler', () => {
       expect(core.setFailed).toHaveBeenCalledWith(mockError.message);
     });
   });
+
+  // DO NOT PUT TESTS HERE. THEY WILL BREAK, SEE PREVIOUS COMMENTS.
 });
 
 

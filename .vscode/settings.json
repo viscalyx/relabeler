@@ -1,4 +1,5 @@
 {
+    "terminal.integrated.shell.linux": "/bin/bash",
     "editor.codeActionsOnSave": {
         "source.fixAll.eslint": "always"
     },
@@ -14,6 +15,9 @@
     "cSpell.words": [
         "Relabeler",
         "relabeler",
-        "unmock"
-    ]
+        "unmock",
+        "viscalyx",
+        "Viscalyx"
+    ],
+    "extensions.ignoreRecommendations": true
 }

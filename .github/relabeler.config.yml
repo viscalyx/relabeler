@@ -8,71 +8,72 @@
 pulls:
   labels:
     - label:
-      name: "waiting for code fix"
-      add:
-        - when:
-          statuses:
-            continuous-integration/appveyor/pr: failure
-            license/cla: success
-          notLabeled:
-            - on hold
-        - when:
-          statuses:
-            license/cla: success
-          canBeMerged: no
-        - when:
-          statuses:
-            license/cla: success
-          reviewRequestChange: yes # Means GitHub Review comment (change without LGTM comment, or blocked)
-      remove:
-        - when:
-          statuses:
-            continuous-integration/appveyor/pr: success
-            license/cla: success
-          canBeMerged: yes
-          # To determine this, maybe each review comment int he PR must be evaluated, to finally get true or false.
-          reviewResponseToRequestChange: yes # Means one or more GitHub review comments that starts with 'Done'.
-          onPush: yes
-        - when:
-          labeled:
-            - on hold
-        - when:
-          reviewApproved: yes
+        name: "waiting for code fix"
+        add:
+          - when:
+              statuses:
+                continuous-integration/appveyor/pr: failure
+                license/cla: success
+              notLabeled:
+                - on hold
+          - when:
+              statuses:
+                license/cla: success
+              canBeMerged: false
+          - when:
+              statuses:
+                license/cla: success
+              reviewRequestChange: true # Means GitHub Review comment (change without LGTM comment, or blocked)
+        remove:
+          - when:
+              statuses:
+                continuous-integration/appveyor/pr: success
+                license/cla: success
+              canBeMerged: true
+              # To determine this, maybe each review comment int he PR must be evaluated, to finally get true or false.
+              reviewResponseToRequestChange: true # Means one or more GitHub review comments that starts with 'Done'.
+              onPush: true
+          - when:
+              labeled:
+                - on hold
+          - when:
+              reviewApproved: true
 
     - label:
-      name: "needs review"
-      add:
-        - when:
-          statuses:
-            continuous-integration/appveyor/pr: success
-            license/cla: success
-          canBeMerged: yes
-          reviewResponseToRequestChange: yes
-          notLabeled:
-            - waiting for author response
-          onPush: yes
-      remove:
-        - when:
-          statuses:
-            continuous-integration/appveyor/pr: failure
-        - when:
-          statuses:
-            license/cla: pending
-        - when:
-          canBeMerged: yes
-        - when:
-          labeled: waiting for author response
+        name: "needs review"
+        add:
+          - when:
+              statuses:
+                continuous-integration/appveyor/pr: success
+                license/cla: success
+              canBeMerged: true
+              reviewResponseToRequestChange: true
+              notLabeled:
+                - waiting for author response
+              onPush: true
+        remove:
+          - when:
+              statuses:
+                continuous-integration/appveyor/pr: failure
+          - when:
+              statuses:
+                license/cla: pending
+          - when:
+              canBeMerged: true
+          - when:
+              labeled:
+                - waiting for author response
 
     - label:
-      name: "ready for merge"
-      add:
-        - when:
-          notLabeled:
-            - waiting for author response
-            - waiting for code fix
-          reviewApproved: yes # This could check that only be true if there are no pushes after last approval.
-      remove:
-        - when:
-          labeled:
-            - waiting for author response
-            - waiting for code fix
+        name: "ready for merge"
+        add:
+          - when:
+              notLabeled:
+                - waiting for author response
+                - waiting for code fix
+              reviewApproved: true # This could check that only be true if there are no pushes after last approval.
+        remove:
+          - when:
+              labeled:
+                - waiting for author response
+                - waiting for code fix

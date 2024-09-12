@@ -21,22 +21,50 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
+      - name: Dump GitHub context
+        if: success()
+        env:
+          GITHUB_CONTEXT: ${{ toJson(github) }}
+        run: echo "$GITHUB_CONTEXT"
+
+      - name: Check for changes in dist folder
+        if: success() && github.event_name == 'pull_request'
+        run: |
+          git remote -v
+          git fetch origin ${{ github.base_ref }}
+          echo "Commits in diff:"
+          git log --oneline origin/${{ github.base_ref }}..HEAD
+          echo "Files in diff:"
+          git diff --name-only origin/${{ github.base_ref }}..HEAD
+          if git diff --name-only origin/${{ github.base_ref }}..HEAD | grep -q "^dist/"; then
+            echo "::error::Changes detected in the dist folder. It is not allowed to push dist in a pull request."
+            exit 1
+          fi
+
       - name: Setup Node.js
+        if: success()
         uses: actions/setup-node@v4
         with:
           node-version: "18.x"
 
       - name: Install dependencies
+        if: success()
         run: npm ci
 
       - name: Build project
+        id: build
+        if: success()
         run: npm run build
 
       - name: Test
+        id: test
+        if: success()
+        continue-on-error: true
         run: |
           npm test
 
       - name: Upload coverage to Codecov
+        if: steps.test.outcome != 'skipped'
         uses: codecov/codecov-action@v4
         with:
           files: ./coverage/lcov.info # cSpell: ignore lcov
@@ -50,7 +78,7 @@ jobs:
           CODECOV_TOKEN: ${{ vars.CODECOV_TOKEN }}
 
       - name: Upload test results to Codecov
-        if: ${{ !cancelled() }}
+        if: steps.test.outcome != 'skipped'
         uses: codecov/test-results-action@v1
         with:
           files: ./testResults/junit.xml
@@ -63,17 +91,20 @@ jobs:
           CODECOV_TOKEN: ${{ vars.CODECOV_TOKEN }}
 
       - name: Create artifact
+        if: steps.build.outcome == 'success'
         run: |
           mkdir artifact
           cp -r dist package.json package-lock.json artifact/
 
       - name: Upload artifact
+        if: steps.build.outcome == 'success'
         uses: actions/upload-artifact@v4
         with:
           name: build-artifact
           path: artifact/
 
       - name: Run Relabeler
+        if: steps.test.outcome == 'success'
         id: relabeler
         uses: ./ # This uses the action from the root of the branch or PR
         with:
@@ -81,6 +112,7 @@ jobs:
           repositoryToken: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Print Relabeler Outputs
+        if: success()
         run: |
           echo "Repository: ${{ steps.relabeler.outputs.repository }}"
           echo "Time: ${{ steps.relabeler.outputs.time }}"
