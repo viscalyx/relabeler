@@ -18,7 +18,7 @@ export async function run() {
     console.log('Workspace path: ', workspacePath);
 
     const configPath = core.getInput('configPath');
-    console.log('Config path: ', configPath);
+    console.log('Input config path: ', configPath);
 
     const config = loadConfig(workspacePath, configPath || undefined);
     console.log('Config loaded: ', JSON.stringify(config, null, 2));

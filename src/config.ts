@@ -11,7 +11,6 @@ export function loadConfig(repoPath: string, configPath?: string): RelabelerConf
 
     if (configPath) {
         configFilePath = path.join(repoPath, configPath);
-        console.log('Config file path: ', configFilePath);
         if (!fs.existsSync(configFilePath)) {
             throw new Error(`Config file not found at specified path: ${configFilePath}`);
         }
@@ -36,6 +35,8 @@ export function loadConfig(repoPath: string, configPath?: string): RelabelerConf
 
         configFilePath = foundConfigPath;
     }
+
+    console.log('Config file path: ', configFilePath);
 
     const fileContents = fs.readFileSync(configFilePath, 'utf8');
     const config = yaml.load(fileContents) as RelabelerConfig;
