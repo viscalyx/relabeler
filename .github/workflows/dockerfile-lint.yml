@@ -12,7 +12,7 @@ jobs:
     # cSpell: ignore hadolint .devcontainer sarif codeql
     steps:
       - name: Checkout code
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
 
       - name: Install Hadolint
         run: sudo wget -O /bin/hadolint https://github.com/hadolint/hadolint/releases/download/v2.8.0/hadolint-Linux-x86_64 && sudo chmod +x /bin/hadolint
@@ -40,7 +40,7 @@ jobs:
           sarif_file: testResults/hadolint-results.sarif
 
       - name: Upload testResults
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v4
         if: always() && steps.check_sarif.outputs.file_exists == 'true'
         with:
           name: hadolint-results
