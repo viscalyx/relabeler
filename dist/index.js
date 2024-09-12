@@ -39194,7 +39194,7 @@ var __importStar = (this && this.__importStar) || function (mod) {
     return result;
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.run = void 0;
+exports.run = run;
 const core = __importStar(__nccwpck_require__(2186));
 const github = __importStar(__nccwpck_require__(5438));
 const config_1 = __nccwpck_require__(6373);
@@ -39231,7 +39231,6 @@ async function run() {
         }
     }
 }
-exports.run = run;
 
 
 /***/ }),
@@ -39268,7 +39267,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.loadConfig = void 0;
+exports.loadConfig = loadConfig;
 const fs = __importStar(__nccwpck_require__(7147));
 const path = __importStar(__nccwpck_require__(1017));
 const yaml = __importStar(__nccwpck_require__(1917));
@@ -39311,7 +39310,6 @@ function loadConfig(repoPath, configPath) {
     }
     return config;
 }
-exports.loadConfig = loadConfig;
 
 
 /***/ }),
