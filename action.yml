@@ -19,3 +19,6 @@ outputs:
     description: "The time we greeted you"
   repository:
     description: "The current repository"
+branding:
+  icon: "tag"
+  color: "white"

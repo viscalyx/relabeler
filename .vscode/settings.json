@@ -17,7 +17,19 @@
         "relabeler",
         "unmock",
         "viscalyx",
-        "Viscalyx"
+        "Viscalyx",
+        "dbaeumer",
+        "streetsidesoftware",
+        "codecov",
+        "davidanson",
+        "firsttris",
+        "gruntfuggly",
+        "orta",
+        "redhat",
+        "usernamehw",
+        "bierner",
+        "azuretools",
+        "errorlens"
     ],
     "extensions.ignoreRecommendations": true
 }

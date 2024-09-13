@@ -1,0 +1,15 @@
+{
+    "recommendations": [
+        "dbaeumer.vscode-eslint",
+        "streetsidesoftware.code-spell-checker",
+        "codecov.codecov",
+        "davidanson.vscode-markdownlint",
+        "firsttris.vscode-jest-runner",
+        "gruntfuggly.todo-tree",
+        "orta.vscode-jest",
+        "redhat.vscode-yaml",
+        "usernamehw.errorlens",
+        "ms-azuretools.vscode-docker",
+        "bierner.markdown-mermaid"
+    ]
+}
