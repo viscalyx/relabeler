@@ -33,6 +33,7 @@ export async function run() {
 
     const eventName = github.context.eventName;
 
+    // TODO: Must mock this part of the code
     if ('action' in github.context.payload) {
       eventType = github.context.payload.action ?? '';
     }
@@ -43,11 +44,13 @@ export async function run() {
     let labels: string[] = [];
 
     switch (eventName) {
-      case 'pull_request':
+      case 'pull_request': {
         const payload = github.context.payload as PullRequestOpenedEvent | PullRequestReopenedEvent | PullRequestClosedEvent | PullRequestLabeledEvent | PullRequestUnlabeledEvent | PullRequestEditedEvent;
         labels = payload.pull_request.labels.map(label => label.name);
 
         break;
+      }
+
       // Add other event cases if needed
       default:
         console.log(`Unhandled event: ${eventName}`);
