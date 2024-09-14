@@ -21,6 +21,9 @@ import {
 jest.mock('@actions/core');
 jest.mock('@actions/github', () => ({
   context: {
+    payload: {
+      action: 'opened',
+    },
     repo: {
       repo: 'testRepo',
       owner: 'testOwner',
@@ -208,7 +211,7 @@ describe('Relabeler', () => {
         sha: '1234567890abcdef1234567890abcdef12345678',
         ref: 'refs/heads/main',
         workflow: 'Test Workflow',
-        action: 'run',
+        action: 'opened',
         actor: 'username',
         job: 'test-job',
         runNumber: 1,
