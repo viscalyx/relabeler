@@ -28,7 +28,7 @@ describe('When calling action without mandatory parameters', () => {
     it('Should call the method setFailed() once', async () => {
         expect.assertions(2);
 
-        const mockCoreSetFailed = jest.spyOn(core, 'setFailed');
+        const mockCoreSetFailed = jest.spyOn(core, 'setFailed').mockImplementation(() => { });
 
         await runOld();
 
