@@ -1,7 +1,7 @@
 name: "relabeler"
 description: "A GitHub Action that is able to label issues and pull requests on events."
 runs:
-  using: "node16"
+  using: "node20"
   main: "dist/index.js"
 inputs:
   who-to-greet:

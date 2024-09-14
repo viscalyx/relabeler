@@ -1,6 +1,5 @@
 # Use the official Node.js image as a parent image
-#FROM mcr.microsoft.com/vscode/devcontainers/javascript-node:0-18
-FROM mcr.microsoft.com/devcontainers/typescript-node:18
+FROM mcr.microsoft.com/devcontainers/typescript-node:20
 
 # Add a label to name your image
 LABEL name="relabeler-dev"
@@ -9,7 +8,7 @@ LABEL name="relabeler-dev"
 # Debian version should be the same as the base image.
 ENV DEBIAN_VERSION=12
 ENV DOTNET_SDK_VERSION=8.0
-ENV NODE_VERSION=18
+ENV NODE_VERSION=20
 
 # Install additional OS packages and .NET SDK
 # hadolint ignore=DL3008
