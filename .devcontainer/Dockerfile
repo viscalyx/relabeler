@@ -1,5 +1,5 @@
 # Use the official Node.js image as a parent image
-FROM mcr.microsoft.com/devcontainers/typescript-node:20
+FROM mcr.microsoft.com/devcontainers/typescript-node:22
 
 # Add a label to name your image
 LABEL name="relabeler-dev"
