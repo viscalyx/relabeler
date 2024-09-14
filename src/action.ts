@@ -1,6 +1,7 @@
 import * as core from '@actions/core';
 import * as github from '@actions/github';
 import { loadConfig } from './config';
+import { PullRequestOpenedEvent, PullRequestReopenedEvent, PullRequestClosedEvent, PullRequestLabeledEvent, PullRequestUnlabeledEvent, PullRequestEditedEvent } from '@octokit/webhooks-types';
 
 export async function run() {
   try {
@@ -27,6 +28,35 @@ export async function run() {
     const time = (new Date()).toTimeString();
     console.log(`Setting output time: ${time}`);
     core.setOutput('time', time);
+
+    let eventType: string = '';
+
+    const eventName = github.context.eventName;
+
+    // TODO: Must mock this part of the code
+    if ('action' in github.context.payload) {
+      eventType = github.context.payload.action ?? '';
+    }
+
+    console.log(`Event name: ${eventName}`);
+    console.log(`Event type: ${eventType}`);
+
+    let labels: string[] = [];
+
+    switch (eventName) {
+      case 'pull_request': {
+        const payload = github.context.payload as PullRequestOpenedEvent | PullRequestReopenedEvent | PullRequestClosedEvent | PullRequestLabeledEvent | PullRequestUnlabeledEvent | PullRequestEditedEvent;
+        labels = payload.pull_request.labels.map(label => label.name);
+
+        break;
+      }
+
+      // Add other event cases if needed
+      default:
+        console.log(`Unhandled event: ${eventName}`);
+    }
+
+    console.log(`Collected labels: ${labels.join(', ')}`);
   } catch (error) {
     if (error instanceof Error) {
       if (!error.message.startsWith('Mock')) {

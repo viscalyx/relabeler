@@ -61,7 +61,7 @@ jobs:
         if: success()
         continue-on-error: true
         run: |
-          npm test
+          npm run test:ci
 
       - name: Upload coverage to Codecov
         if: steps.test.outcome != 'skipped'

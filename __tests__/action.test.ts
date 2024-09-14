@@ -21,6 +21,9 @@ import {
 jest.mock('@actions/core');
 jest.mock('@actions/github', () => ({
   context: {
+    payload: {
+      action: 'opened',
+    },
     repo: {
       repo: 'testRepo',
       owner: 'testOwner',
@@ -104,6 +107,8 @@ describe('Relabeler', () => {
       expect(mockedCore.setOutput).toHaveBeenCalledWith('time', expect.any(String));
       expect(loadConfig).toHaveBeenCalledWith('/test/workspace', undefined);
       expect(mockedCore.debug).toHaveBeenCalledWith(`Loaded config: ${JSON.stringify(mockConfig)}`);
+
+      expect(core.setFailed).not.toHaveBeenCalled();
     });
 
     it('should load all possible properties in the config', async () => {
@@ -133,6 +138,8 @@ describe('Relabeler', () => {
       expect(removeConditions).toContainEqual({ when: { labeled: 'bug' } });
       expect(removeConditions).toContainEqual({ when: { labeled: ['feature', 'enhancement'] } });
       expect(removeConditions).toContainEqual({ when: { reviewApproved: false } });
+
+      expect(core.setFailed).not.toHaveBeenCalled();
     });
   });
 
@@ -151,6 +158,8 @@ describe('Relabeler', () => {
         'repository',
         'testOwner/testRepo'
       );
+
+      expect(core.setFailed).not.toHaveBeenCalled();
     });
   });
 
@@ -187,6 +196,8 @@ describe('Relabeler', () => {
       expect(mockedCore.setOutput).toHaveBeenCalledWith('time', expect.any(String));
       expect(loadConfig).toHaveBeenCalledWith('/test/workspace', customConfigPath);
       expect(mockedCore.debug).toHaveBeenCalledWith(`Loaded config: ${JSON.stringify(mockConfig)}`);
+
+      expect(core.setFailed).not.toHaveBeenCalled();
     });
   });
 
@@ -200,7 +211,7 @@ describe('Relabeler', () => {
         sha: '1234567890abcdef1234567890abcdef12345678',
         ref: 'refs/heads/main',
         workflow: 'Test Workflow',
-        action: 'run',
+        action: 'opened',
         actor: 'username',
         job: 'test-job',
         runNumber: 1,

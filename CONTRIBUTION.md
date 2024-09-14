@@ -46,7 +46,7 @@ Please ensure that your changes pass all existing tests and add new tests for an
 To run the tests, use the following command:
 
 ```bash
-npm test
+npm test:ci
 ```
 
 This command will:
@@ -58,7 +58,13 @@ This command will:
 If you want to run only the Jest tests without cleaning or linting, you can use:
 
 ```bash
-npx jest
+npm test
+```
+
+or with debugging
+
+```bash
+npm test:debug
 ```
 
 ### Running Individual Tests
@@ -68,9 +74,22 @@ To run a specific test file, use:
 ```bash
 npx jest path/to/your/test-file.test.ts
 ```
+
+or
+
+```bash
+npm test -- path/to/your/test-file.test.ts
+```
+
 Replace `path/to/your/test-file.test.ts` with the actual path to the test file you want to run.
 
-To run a specific test file, use the `--coverage=false`:
+To run a specific test file without coverage, use the `--coverage=false`:
+
+```bash
+npm test -- --coverage=false path/to/your/test-file.test.ts
+```
+
+or
 
 ```bash
 npx jest --coverage=false path/to/your/test-file.test.ts

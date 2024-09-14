@@ -6,7 +6,10 @@
     "clean": "rm -rf dist",
     "clean:coverage": "rm -rf coverage testResults",
     "build": "npm run clean && npx ncc build src/index.ts -o dist --source-map --license licenses.txt",
-    "test": "npm run clean:coverage && jest --coverage --verbose --detectOpenHandles && npm run lint",
+    "test": "jest --verbose --detectOpenHandles",
+    "test:debug": "jest --coverage=false --verbose --detectOpenHandles --debug",
+    "test:watch": "jest --watchAll --coverage=false --verbose --detectOpenHandles",
+    "test:ci": "npm run clean:coverage && jest --coverage --verbose --detectOpenHandles && npm run lint",
     "lint": "eslint 'src/**/*.{ts,js}'",
     "lint:fix": "eslint 'src/**/*.{ts,js}' --fix"
   },
@@ -19,7 +22,8 @@
     "@actions/core": "^1.10.1",
     "@actions/github": "^6.0.0",
     "js-yaml": "^4.1.0",
-    "ajv": "^8.17.1"
+    "ajv": "^8.17.1",
+    "@octokit/webhooks-types": "^7.5.1"
   },
   "devDependencies": {
     "typescript": "5.5.4",
