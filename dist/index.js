@@ -39218,6 +39218,26 @@ async function run() {
         const time = (new Date()).toTimeString();
         console.log(`Setting output time: ${time}`);
         core.setOutput('time', time);
+        let eventType = '';
+        const eventName = github.context.eventName;
+        // TODO: Must mock this part of the code
+        if ('action' in github.context.payload) {
+            eventType = github.context.payload.action ?? '';
+        }
+        console.log(`Event name: ${eventName}`);
+        console.log(`Event type: ${eventType}`);
+        let labels = [];
+        switch (eventName) {
+            case 'pull_request': {
+                const payload = github.context.payload;
+                labels = payload.pull_request.labels.map(label => label.name);
+                break;
+            }
+            // Add other event cases if needed
+            default:
+                console.log(`Unhandled event: ${eventName}`);
+        }
+        console.log(`Collected labels: ${labels.join(', ')}`);
     }
     catch (error) {
         if (error instanceof Error) {
