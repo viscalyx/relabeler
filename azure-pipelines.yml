@@ -1,3 +1,4 @@
+# This is the Azure Pipelines configuration for the relabeler project. IT IS NOT ACTIVATED.
 trigger:
   branches:
     include:
@@ -16,7 +17,7 @@ pool:
 steps:
   - task: NodeTool@0
     inputs:
-      versionSpec: "18.x"
+      versionSpec: "20.x"
     displayName: "Install Node.js"
 
   - script: |

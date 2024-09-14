@@ -8,11 +8,11 @@ export default [
     languageOptions: {
       globals: {
         ...globals.node,
-        ...globals.es2020
+        ...globals.es2022
       },
       parser: ts_eslint.parser,
       parserOptions: {
-        ecmaVersion: 2020,
+        ecmaVersion: 2022,
         sourceType: 'module'
       },
     },

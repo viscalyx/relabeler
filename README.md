@@ -2,6 +2,10 @@
 
 A GitHub Action that labels issues and pull requests on events.
 
+## Requirements
+
+- Node.js v20 or higher
+
 ## Usage
 
 To use this action, create a workflow file (e.g., `.github/workflows/relabeler.yml`) in your repository with the following content:

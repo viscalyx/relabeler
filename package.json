@@ -51,5 +51,8 @@
     "reportTestSuiteErrors": "true",
     "includeConsoleOutput": "true",
     "ancestorSeparator": " :: "
+  },
+  "engines": {
+    "node": ">=20.0.0"
   }
 }
