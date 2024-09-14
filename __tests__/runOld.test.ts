@@ -136,6 +136,12 @@ describe('When executing as a process', () => {
     });
 
     // NOTE: This test does not work since it will run the action, which is run(), not runOld().
+    // Dummy test to keep the beforeAll() and afterAll() intact
+
+    it('should pass a dummy test', () => {
+        expect(true).toBe(true);
+    });
+
     //
     // shows how the runner will run a javascript action with env / stdout protocol
     // it('Should not throw an error', () => {
