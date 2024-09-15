@@ -1,6 +1,6 @@
 # relabeler
 
-A GitHub Action that labels issues and pull requests on events.
+A GitHub Action that labels issues and pull requests on events. THIS IS UNDER DEVELOPMENT.
 
 ## Requirements
 
