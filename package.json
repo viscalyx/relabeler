@@ -1,6 +1,6 @@
 {
   "name": "relabeler",
-  "version": "0.0.1-preview.37",
+  "version": "0.0.1-preview.46",
   "main": "dist/index.js",
   "scripts": {
     "clean": "rm -rf dist",
