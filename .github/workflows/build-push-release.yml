@@ -24,14 +24,14 @@ jobs:
 
       # Install GitVersion
       - name: Install GitVersion
-        uses: gittools/actions/gitversion/setup@v3.0.0 # cSpell: ignore gittools
+        uses: gittools/actions/gitversion/setup@v3.0.1 # cSpell: ignore gittools
         with:
           versionSpec: "6.x"
 
       # Determine the version using GitVersion
       - name: Determine Version
         id: gitversion
-        uses: gittools/actions/gitversion/execute@v3.0.0
+        uses: gittools/actions/gitversion/execute@v3.0.1
         with:
           useConfigFile: true
           configFilePath: gitversion.yml
