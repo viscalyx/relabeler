@@ -2,9 +2,11 @@
 # It is triggered by a push to the main branch or any release branch. The release branch must be in the format "releases/x.y.z"
 # and is created by the create release branch workflow.
 name: Build, Push, and Release
+permissions:
+  contents: write
+  pull-requests: write
 
 on:
-  push:
     branches:
       - main
       - "releases/**"
