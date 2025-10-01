@@ -5,7 +5,7 @@ FROM mcr.microsoft.com/devcontainers/typescript-node:24
 LABEL name="relabeler-dev"
 
 # Set environment variables for versions
-ENV NODE_VERSION=20
+ENV NODE_VERSION=24
 
 # Install n package manager and use it to install the latest Node.js and npm
 RUN npm install -g n@latest && n $NODE_VERSION \
