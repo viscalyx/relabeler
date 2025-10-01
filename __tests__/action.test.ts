@@ -216,6 +216,7 @@ describe('Relabeler', () => {
         job: 'test-job',
         runNumber: 1,
         runId: 12345,
+        runAttempt: 1,
         apiUrl: 'https://api.github.com',
         serverUrl: 'https://github.com',
         graphqlUrl: 'https://api.github.com/graphql',
