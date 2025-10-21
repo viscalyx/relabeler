@@ -1,6 +1,12 @@
 { // CSpell:ignore dbaeumer davidanson firsttris gruntfuggly orta usernamehw azuretools errorlens bierner
     "name": "Relabeler Dev Container", // A development container for Node.js and TypeScript projects with GitVersion support.
     "dockerFile": "Dockerfile",
+    "features": {
+        "ghcr.io/devcontainers/features/dotnet:2": {
+            "version": "8.0",
+            "installUsingApt": false
+        }
+    },
     "build": {
         "context": "..",
         "args": {
@@ -21,7 +27,6 @@
             "extensions": [
                 "dbaeumer.vscode-eslint",
                 "streetsidesoftware.code-spell-checker",
-                "codecov.codecov",
                 "davidanson.vscode-markdownlint",
                 "firsttris.vscode-jest-runner",
                 "gruntfuggly.todo-tree",
@@ -33,7 +38,7 @@
             ]
         }
     },
-    "postCreateCommand": "npm install", // Runs when the dev container has been assigned to a user for the first time.
+    "postCreateCommand": "npm install && dotnet tool install --global GitVersion.Tool", // Runs when the dev container has been assigned to a user for the first time.
     //"postStartCommand": "bash", // Runs each time the container is successfully started
     "remoteUser": "node", // The user to use when connecting to the container
     "workspaceMount": "source=${localWorkspaceFolder},target=/workspaces/relabeler,type=bind,consistency=cached",
