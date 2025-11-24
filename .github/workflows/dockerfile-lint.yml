@@ -14,7 +14,7 @@ jobs:
     # cSpell: ignore hadolint .devcontainer sarif codeql
     steps:
       - name: Checkout code
-        uses: actions/checkout@v5
+        uses: actions/checkout@v6
 
       - name: Install Hadolint
         run: sudo wget -O /bin/hadolint https://github.com/hadolint/hadolint/releases/download/v2.8.0/hadolint-Linux-x86_64 && sudo chmod +x /bin/hadolint
